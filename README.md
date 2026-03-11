@@ -1,5 +1,7 @@
 # ✦ AuraTime
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 **Good Time / Bad Time Checker**
 
 A lightweight, cross-platform utility that instantly tells you whether the current time falls within traditionally inauspicious Vedic time periods — **Rahu Kalam**, **Yamagandam**, or **Gulika Kalam**.
@@ -110,6 +112,14 @@ good-time-check/
 
 ---
 
+## Technical Documentation
+
+*   [Code Documentation](CODE_DOCUMENTATION.md) — Dive into the engine and module interactions.
+*   [Design Philosophy](DESIGN_PHILOSOPHY.md) — Why AuraTime was built this way.
+*   [Contributing](CONTRIBUTING.md) — How you can help improve the project.
+
+---
+
 ## Requirements
 
 - **Node.js** (v14 or later) — for the CLI
@@ -118,6 +128,8 @@ good-time-check/
 
 ---
 
-## License
+## License & Copyright
 
-MIT
+Copyright (C) 2026 **Krishna Kanth B**
+
+This project is licensed under the **GPL v3 License** - see the [LICENSE](LICENSE) file for details.
