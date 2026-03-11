@@ -1,0 +1,26 @@
+{
+  "name": "auratime",
+  "version": "1.0.0",
+  "description": "AuraTime — Instantly check if the current time falls within Rahu Kalam, Yamagandam, or Gulika Kalam.",
+  "main": "cli/interface.js",
+  "bin": {
+    "auratime": "cli/interface.js"
+  },
+  "scripts": {
+    "start": "node cli/interface.js",
+    "check": "node cli/interface.js --once",
+    "serve": "npx -y serve . -l 3000"
+  },
+  "keywords": [
+    "rahu-kalam",
+    "yamagandam",
+    "gulika-kalam",
+    "vedic",
+    "time-checker",
+    "auspicious",
+    "cli",
+    "pwa"
+  ],
+  "license": "MIT",
+  "author": ""
+}
