@@ -1,5 +1,9 @@
 # ✦ AuraTime
 
+<p align="center">
+  <img src="assets/release_v1_0_0.png" alt="Aura Time v1.0.0" width="60%">
+</p>
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 **Good Time / Bad Time Checker**
