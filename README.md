@@ -58,7 +58,7 @@ chmod +x auratime_web.sh
 ```bash
 npm run serve
 ```
-Then manually open [http://localhost:3000/pwa](http://localhost:3000/pwa) in your browser.
+Then manually open [http://localhost:3003/pwa](http://localhost:3003/pwa) in your browser.
 
 ---
 

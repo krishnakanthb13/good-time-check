@@ -20,11 +20,11 @@ echo  Opening http://localhost:3000/pwa in your default browser...
 echo.
 
 :: Open the browser asynchronously
-start http://localhost:3000/pwa
+start http://localhost:3003/pwa
 
 :: Start the server locally in the current directory
 cd /d "%~dp0"
-call npx -y serve . -l 3000
+call npx -y serve . -l 3003
 
 if %errorlevel% neq 0 (
     echo.

@@ -14,7 +14,7 @@ fi
 
 echo ""
 echo "  Starting AuraTime Web Server..."
-echo "  Opening http://localhost:3000/pwa in your default browser..."
+echo "  Opening http://localhost:3003/pwa in your default browser..."
 echo ""
 
 cd "$SCRIPT_DIR"
@@ -22,11 +22,11 @@ cd "$SCRIPT_DIR"
 # Try to open the browser based on the OS
 sleep 1 && (
   if command -v xdg-open &> /dev/null; then
-      xdg-open http://localhost:3000/pwa
+      xdg-open http://localhost:3003/pwa
   elif command -v open &> /dev/null; then
-      open http://localhost:3000/pwa
+      open http://localhost:3003/pwa
   fi
 ) &
 
 # Run the server
-npx -y serve . -l 3000
+npx -y serve . -l 3003
