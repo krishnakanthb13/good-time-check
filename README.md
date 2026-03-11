@@ -89,7 +89,18 @@ Then manually open [http://localhost:3003/pwa](http://localhost:3003/pwa) in you
 | **Yamagandam** | Governed by Yama (deity of death/justice). Avoid auspicious activities. |
 | **Gulika Kalam** | Linked to Saturn's sub-planet Gulika. Tasks may face obstacles. |
 
-> **Note:** Timings are based on a standard 06:00 sunrise / 18:00 sunset assumption. For precise calculations based on your location's actual sunrise, consult a local Panchang.
+---
+
+## ⚙️ Calculation Logic & Trade-offs
+
+AuraTime uses a fixed **06:00 sunrise / 18:00 sunset** baseline rather than a live Ephemeris. This is a deliberate architectural decision to ensure:
+
+- ⚡ **Instant Loading** — No complex astronomical lookups or GPS waiting times.
+- 🔒 **Absolute Privacy** — We never request, store, or track your location.
+- ✈️ **Offline Native** — Works anywhere on Earth without an internet connection.
+- 📦 **Zero Maintenance** — No heavy external libraries or API dependencies.
+
+*For precise religious rituals requiring exact GPS-based timings, we recommend consulting a local Panchang.*
 
 ---
 
@@ -130,6 +141,16 @@ good-time-check/
 - **Node.js** (v14 or later) — for the CLI
 - A modern browser — for the PWA
 - No other dependencies required
+
+---
+
+## 🔮 Future Roadmap
+
+While AuraTime currently prioritizes speed and minimalism, we are exploring the following for future versions:
+
+- 🛰️ **Precision Mode (Optional)**: An opt-in mode to use a live Ephemeris for location-specific sunrise/sunset calculations.
+- 🛠️ **AuraTime Pro (Separate Tool)**: A more advanced version with global maps, precise GPS lookups, and detailed planetary data.
+- 🔔 **Insignificant Notifications**: Desktop/Mobile alerts before a period begins.
 
 ---
 

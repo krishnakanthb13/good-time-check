@@ -60,11 +60,14 @@ AuraTime uses the standard Vedic 1/8th Segment Rule.
 
 ---
 
-## 🛠️ Limitations
+## 🛠️ Limitations vs. Utility
 
-AuraTime is a **utility tool**, not a full astrological consultation.
-*   **Sunrise Variation**: We use a fixed 06:00 AM baseline for speed and zero-dependency performance. For critical religious rituals, always verify with a local Panchang based on your exact GPS coordinates.
-*   **No Personal Charting**: AuraTime does not look at your personal birth chart (Janma Kundali). It tracks the *general* quality of time available to everyone.
+AuraTime is a **utility tool**, designed for instant-access "energetic weather" checks.
+
+*   **Sunrise Variation**: We use a fixed 06:00 AM baseline for speed, zero-dependency performance, and absolute privacy. 
+*   **Precision Trade-off**: While local sunrise varies, the standard table is used as a reliable baseline for general planning. 
+*   **Future Roadmap**: To address the needs of high-precision practitioners, we are exploring an opt-in **"Ephemeris Mode"** or a separate **"AuraTime Pro"** tool for GPS-specific calculations.
+*   **No Personal Charting**: AuraTime tracks the *general* quality of time available to everyone, not specific Janma Kundali.
 
 ---
 

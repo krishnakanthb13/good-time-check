@@ -32,7 +32,7 @@ AuraTime requires no internet connection after the initial load. There are no tr
 
 ## ⚖️ Trade-offs & Constraints
 
-*   **Fixed Sunrise**: AuraTime currently uses the standard 06:00 AM sunrise baseline. While local sunrise varies slightly, the standard baseline is widely used for calculation in modern contexts and keeps the app zero-dependency.
+*   **Fixed Sunrise Baseline**: We use a standard 06:00 AM base instead of a live Ephemeris. This is a primary design choice to maintain **Instant Speed** (no GPS lag), **Absolute Privacy** (no location tracking), and **Offline Reliability** (no API calls). *Note: Future versions may introduce a high-precision "Ephemeris Mode" as a separate optional feature or standalone professional tool.*
 *   **Zero Dependencies**: We deliberately avoided frameworks like React or Tailwind to ensure the app stays under 100KB and remains maintainable decades from now.
 
 ## 👤 Target Audience
