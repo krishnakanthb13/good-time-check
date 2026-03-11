@@ -14,20 +14,16 @@ if %errorlevel% neq 0 (
 )
 
 :: ─── Launch Browser and Server ───────────────────────────────────
-echo.
 echo  Starting AuraTime Web Server...
-echo  Opening http://localhost:3000/pwa in your default browser...
+echo  Opening http://localhost:3003/pwa in your default browser...
 echo.
+echo  ------------------------------------------------
+echo  [INFO] Press Ctrl + C, then Y to close the server cleanly.
+echo  ------------------------------------------------
 
-:: Open the browser asynchronously
-start http://localhost:3003/pwa
+:: Open the browser asynchronously after a 3-second delay to let the server start
+start /b cmd /c "timeout /t 3 /nobreak >nul & start http://localhost:3003/pwa"
 
-:: Start the server locally in the current directory
+:: Start the server locally via npm to preserve correct shutdown handling
 cd /d "%~dp0"
-call npx -y serve . -l 3003
-
-if %errorlevel% neq 0 (
-    echo.
-    echo  [ERROR] Failed to start the server.
-    pause
-)
+call npm run serve

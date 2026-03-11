@@ -156,17 +156,31 @@ function main() {
   // Interactive mode
   const periodKeys = ["rahuKalam", "yamagandam", "gulikaKalam"];
   let selectedIndex = 0;
+  let currentScreen = "main"; // Tracks what to render: "main" or "explain"
 
-  function render() {
+  // Hide cursor for smoother redraws
+  process.stdout.write("\x1b[?25l");
+
+  function renderCurrentScreen() {
     clearScreen();
-    const status = getTimeStatus();
-    printBanner();
-    printStatus(status);
-    printSchedule(status);
-    printHelp();
+    if (currentScreen === "main") {
+      const status = getTimeStatus();
+      printBanner();
+      printStatus(status);
+      printSchedule(status);
+      printHelp();
+    } else if (currentScreen === "explain") {
+      printBanner();
+      printExplanation(periodKeys[selectedIndex]);
+      console.log(
+        `  ${C.dim}↑↓ Navigate  |  Press any other key to go back${C.reset}`
+      );
+    }
   }
 
-  render();
+  // Initial render and setup 1-minute ticking loop
+  renderCurrentScreen();
+  setInterval(renderCurrentScreen, 60000);
 
   // Setup raw input
   readline.emitKeypressEvents(process.stdin);
@@ -179,60 +193,52 @@ function main() {
 
     if (key.name === "q" || (key.ctrl && key.name === "c")) {
       clearScreen();
+      process.stdout.write("\x1b[?25h"); // Show cursor again
       console.log(`\n  ${C.cyan}${C.bold}Thank you for using AuraTime! ✦${C.reset}\n`);
       process.exit(0);
     }
 
     if (key.name === "r") {
-      clearScreen();
-      printBanner();
-      printExplanation("rahuKalam");
-      console.log(`  ${C.dim}Press any key to go back...${C.reset}`);
+      selectedIndex = periodKeys.indexOf("rahuKalam");
+      currentScreen = "explain";
+      renderCurrentScreen();
       return;
     }
     if (key.name === "y") {
-      clearScreen();
-      printBanner();
-      printExplanation("yamagandam");
-      console.log(`  ${C.dim}Press any key to go back...${C.reset}`);
+      selectedIndex = periodKeys.indexOf("yamagandam");
+      currentScreen = "explain";
+      renderCurrentScreen();
       return;
     }
     if (key.name === "g") {
-      clearScreen();
-      printBanner();
-      printExplanation("gulikaKalam");
-      console.log(`  ${C.dim}Press any key to go back...${C.reset}`);
+      selectedIndex = periodKeys.indexOf("gulikaKalam");
+      currentScreen = "explain";
+      renderCurrentScreen();
       return;
     }
     if (key.name === "s") {
-      render();
+      currentScreen = "main";
+      renderCurrentScreen();
       return;
     }
 
     // Arrow navigation for explanations
     if (key.name === "up") {
       selectedIndex = (selectedIndex - 1 + periodKeys.length) % periodKeys.length;
-      clearScreen();
-      printBanner();
-      printExplanation(periodKeys[selectedIndex]);
-      console.log(
-        `  ${C.dim}↑↓ Navigate  |  Press any other key to go back${C.reset}`
-      );
+      currentScreen = "explain";
+      renderCurrentScreen();
       return;
     }
     if (key.name === "down") {
       selectedIndex = (selectedIndex + 1) % periodKeys.length;
-      clearScreen();
-      printBanner();
-      printExplanation(periodKeys[selectedIndex]);
-      console.log(
-        `  ${C.dim}↑↓ Navigate  |  Press any other key to go back${C.reset}`
-      );
+      currentScreen = "explain";
+      renderCurrentScreen();
       return;
     }
 
     // Any other key goes back to main
-    render();
+    currentScreen = "main";
+    renderCurrentScreen();
   });
 
   process.stdin.resume();
