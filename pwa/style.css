@@ -1,0 +1,569 @@
+/* ═══════════════════════════════════════════════════════════════════
+   AuraTime — PWA Stylesheet
+   A premium dark-mode, glassmorphism-styled Vedic time checker.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Design Tokens ────────────────────────────────────────────── */
+:root {
+  --bg-primary: #0a0a14;
+  --bg-card: rgba(255, 255, 255, 0.04);
+  --bg-card-hover: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-glow: rgba(255, 255, 255, 0.1);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+
+  --safe: #22c55e;
+  --safe-bg: rgba(34, 197, 94, 0.15);
+  --safe-border: rgba(34, 197, 94, 0.4);
+  --safe-glow: rgba(34, 197, 94, 0.3);
+
+  --rahu: #ef4444;
+  --rahu-bg: rgba(239, 68, 68, 0.15);
+  --rahu-border: rgba(239, 68, 68, 0.4);
+  --rahu-glow: rgba(239, 68, 68, 0.3);
+
+  --yama: #eab308;
+  --yama-bg: rgba(234, 179, 8, 0.15);
+  --yama-border: rgba(234, 179, 8, 0.4);
+  --yama-glow: rgba(234, 179, 8, 0.3);
+
+  --gulika: #a855f7;
+  --gulika-bg: rgba(168, 85, 247, 0.15);
+  --gulika-border: rgba(168, 85, 247, 0.4);
+  --gulika-glow: rgba(168, 85, 247, 0.3);
+
+  --accent: #6366f1;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+}
+
+/* Light Theme Overrides */
+html[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-card: rgba(0, 0, 0, 0.04);
+  --bg-card-hover: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.1);
+  --border-glow: rgba(0, 0, 0, 0.2);
+
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  
+  --safe: #16a34a;
+  --safe-bg: rgba(22, 163, 74, 0.1);
+  --safe-border: rgba(22, 163, 74, 0.3);
+  --safe-glow: rgba(22, 163, 74, 0.2);
+
+  --rahu: #dc2626;
+  --rahu-bg: rgba(220, 38, 38, 0.1);
+  --rahu-border: rgba(220, 38, 38, 0.3);
+  --rahu-glow: rgba(220, 38, 38, 0.2);
+
+  --yama: #ca8a04;
+  --yama-bg: rgba(202, 138, 4, 0.1);
+  --yama-border: rgba(202, 138, 4, 0.3);
+  --yama-glow: rgba(202, 138, 4, 0.2);
+
+  --gulika: #9333ea;
+  --gulika-bg: rgba(147, 51, 234, 0.1);
+  --gulika-border: rgba(147, 51, 234, 0.3);
+  --gulika-glow: rgba(147, 51, 234, 0.2);
+}
+
+/* ─── Reset & Base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-weight: 600; /* Bolder text globally */
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── App Container ────────────────────────────────────────────── */
+.app {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  min-height: 100vh;
+}
+
+/* ─── Ambient Background Orbs ──────────────────────────────────── */
+.ambient-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 350px;
+  height: 350px;
+  background: var(--accent);
+  top: -100px;
+  right: -120px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 280px;
+  height: 280px;
+  background: var(--gulika);
+  bottom: 10%;
+  left: -140px;
+  animation-delay: -7s;
+}
+
+.orb-3 {
+  width: 200px;
+  height: 200px;
+  background: var(--safe);
+  top: 50%;
+  right: -80px;
+  animation-delay: -14s;
+  opacity: 0.12;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+/* ─── Header ───────────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  padding: 20px 0 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--accent), var(--gulika));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; filter: brightness(1); }
+  50% { opacity: 0.7; filter: brightness(1.4); }
+}
+
+html[data-theme="light"] .logo-icon {
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo h1 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #f8fafc, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html[data-theme="light"] .logo h1 {
+  background: linear-gradient(135deg, #0f172a, #475569);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-toggle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto; /* Push to right slightly */
+  margin-right: -10px; /* Aligns with edge gracefully */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+.tagline {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ─── Clock Section ────────────────────────────────────────────── */
+.clock-section {
+  text-align: center;
+  padding: 30px 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.clock {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--text-primary);
+  line-height: 1;
+  transition: color 0.6s ease;
+}
+
+.day {
+  font-size: 1.1rem; /* slightly larger for readability */
+  color: var(--text-secondary);
+  margin-top: 6px;
+  font-weight: 700; /* bolded */
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ─── Status Section ───────────────────────────────────────────── */
+.status-section {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 30px;
+}
+
+.status-card {
+  padding: 28px 24px;
+  border-radius: var(--radius);
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.status-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  padding: 1px;
+  background: linear-gradient(135deg, transparent, var(--border-glow));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Status states */
+.status-card.safe {
+  background: var(--safe-bg);
+  border: 1px solid var(--safe-border);
+  box-shadow: 0 0 40px var(--safe-glow), inset 0 1px 0 rgba(34, 197, 94, 0.1);
+}
+
+.status-card.rahu {
+  background: var(--rahu-bg);
+  border: 1px solid var(--rahu-border);
+  box-shadow: 0 0 40px var(--rahu-glow), inset 0 1px 0 rgba(239, 68, 68, 0.1);
+  animation: danger-pulse 2s ease-in-out infinite;
+}
+
+.status-card.yama {
+  background: var(--yama-bg);
+  border: 1px solid var(--yama-border);
+  box-shadow: 0 0 40px var(--yama-glow), inset 0 1px 0 rgba(234, 179, 8, 0.1);
+  animation: danger-pulse 2s ease-in-out infinite;
+}
+
+.status-card.gulika {
+  background: var(--gulika-bg);
+  border: 1px solid var(--gulika-border);
+  box-shadow: 0 0 40px var(--gulika-glow), inset 0 1px 0 rgba(168, 85, 247, 0.1);
+  animation: danger-pulse 2s ease-in-out infinite;
+}
+
+@keyframes danger-pulse {
+  0%, 100% { box-shadow: 0 0 30px var(--rahu-glow); }
+  50% { box-shadow: 0 0 50px var(--rahu-glow); }
+}
+
+.status-card.yama { animation-name: yama-pulse; }
+@keyframes yama-pulse {
+  0%, 100% { box-shadow: 0 0 30px var(--yama-glow); }
+  50% { box-shadow: 0 0 50px var(--yama-glow); }
+}
+
+.status-card.gulika { animation-name: gulika-pulse; }
+@keyframes gulika-pulse {
+  0%, 100% { box-shadow: 0 0 30px var(--gulika-glow); }
+  50% { box-shadow: 0 0 50px var(--gulika-glow); }
+}
+
+.status-icon {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+
+.status-label {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.status-detail {
+  font-size: 0.95rem; /* slightly larger */
+  color: var(--text-primary); /* darker text for readability */
+  margin-top: 8px;
+  line-height: 1.6;
+  font-weight: 600;
+}
+
+.safe .status-icon { color: var(--safe); }
+.safe .status-label { color: var(--safe); }
+.rahu .status-icon { color: var(--rahu); }
+.rahu .status-label { color: var(--rahu); }
+.yama .status-icon { color: var(--yama); }
+.yama .status-label { color: var(--yama); }
+.gulika .status-icon { color: var(--gulika); }
+.gulika .status-label { color: var(--gulika); }
+
+/* ─── Section Title ────────────────────────────────────────────── */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 0.95rem; /* larger */
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Schedule Cards ───────────────────────────────────────────── */
+.schedule-section {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 36px;
+}
+
+.schedule-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px; /* Reduced padding from 16px 18px */
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  transition: all 0.3s ease;
+  cursor: pointer; /* Makes it act like a button */
+}
+
+.schedule-item:hover {
+  background: var(--bg-card-hover);
+  transform: translateX(4px);
+}
+
+.schedule-item.active {
+  border-color: var(--border-glow);
+}
+
+.schedule-item.active.is-rahu { border-color: var(--rahu-border); background: var(--rahu-bg); }
+.schedule-item.active.is-yama { border-color: var(--yama-border); background: var(--yama-bg); }
+.schedule-item.active.is-gulika { border-color: var(--gulika-border); background: var(--gulika-bg); }
+
+.schedule-item.past { opacity: 0.4; }
+
+.schedule-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.schedule-dot.dot-rahu { background: var(--rahu); }
+.schedule-dot.dot-yama { background: var(--yama); }
+.schedule-dot.dot-gulika { background: var(--gulika); }
+
+.schedule-item.active .schedule-dot {
+  animation: dot-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+.schedule-name {
+  font-weight: 700; /* bolder name */
+  font-size: 1rem; /* larger font */
+  flex: 1;
+}
+
+.schedule-time {
+  font-size: 0.9rem; /* larger font */
+  font-weight: 600; /* bolded */
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.schedule-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  animation: badge-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ─── Modal ────────────────────────────────────────────────────── */
+.modal {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 1000;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+html[data-theme="light"] .modal {
+  background: rgba(255,255,255,0.4);
+}
+.modal.show {
+  display: flex; opacity: 1;
+}
+.modal-content {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-glow);
+  padding: 30px;
+  border-radius: var(--radius);
+  max-width: 400px; width: 100%;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.modal.show .modal-content {
+  transform: translateY(0);
+}
+.modal-close {
+  position: absolute; top: 12px; right: 20px;
+  background: none; border: none; color: var(--text-muted);
+  font-size: 2rem; cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+.modal-close:hover {
+  color: var(--text-primary);
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.modal-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.modal-desc {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.modal-warn {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-style: italic;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.modal-dot.dot-rahu { background: var(--rahu); box-shadow: 0 0 12px var(--rahu); }
+.modal-dot.dot-yama { background: var(--yama); box-shadow: 0 0 12px var(--yama); }
+.modal-dot.dot-gulika { background: var(--gulika); box-shadow: 0 0 12px var(--gulika); }
+
+/* ─── Footer ───────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.footer p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+/* ─── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .app { padding: 16px 14px 40px; }
+  .clock { font-size: 3rem; }
+  .status-card { padding: 22px 18px; }
+  .status-label { font-size: 1.2rem; }
+}
+
+@media (min-width: 768px) {
+  .app { padding: 40px 24px 80px; }
+}

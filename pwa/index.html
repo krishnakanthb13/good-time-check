@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AuraTime — Instantly check if the current time falls within Rahu Kalam, Yamagandam, or Gulika Kalam. A minimal, beautiful Vedic time checker." />
+  <meta name="theme-color" content="#0f0f1a" />
+  <title>AuraTime — Good Time / Bad Time Checker</title>
+  <link rel="manifest" href="/pwa/manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/pwa/style.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Ambient background orbs -->
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <h1>AuraTime</h1>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">
+          <svg id="themeIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+      </div>
+      <p class="tagline">Good Time / Bad Time Checker</p>
+    </header>
+
+    <!-- Live Clock -->
+    <section class="clock-section" id="clockSection">
+      <div class="clock" id="clock">--:--</div>
+      <div class="day" id="day">---</div>
+    </section>
+
+    <!-- Status Banner -->
+    <section class="status-section" id="statusSection">
+      <div class="status-card" id="statusCard">
+        <div class="status-icon" id="statusIcon">✓</div>
+        <div class="status-label" id="statusLabel">Checking...</div>
+        <div class="status-detail" id="statusDetail"></div>
+      </div>
+    </section>
+
+    <!-- Today's Schedule -->
+    <section class="schedule-section">
+      <h2 class="section-title">Today's Schedule</h2>
+      <div class="schedule-cards" id="scheduleCards"></div>
+    </section>
+
+    <!-- Explanation Modal -->
+    <div id="explanationModal" class="modal">
+      <div class="modal-content">
+        <button class="modal-close" id="modalClose" aria-label="Close Modal">&times;</button>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>AuraTime v1.0 &middot; Timings based on standard 06:00 sunrise</p>
+    </footer>
+  </div>
+
+  <script src="/core/time_tables.js"></script>
+  <script src="/core/time_calculator.js"></script>
+  <script src="/pwa/app.js"></script>
+</body>
+</html>
