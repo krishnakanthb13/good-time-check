@@ -114,6 +114,7 @@ good-time-check/
 
 ## Technical Documentation
 
+*   [Ideology & Knowledge](IDEALOGY.md) — Detailed guide on Rahu, Yama, and Gulika.
 *   [Code Documentation](CODE_DOCUMENTATION.md) — Dive into the engine and module interactions.
 *   [Design Philosophy](DESIGN_PHILOSOPHY.md) — Why AuraTime was built this way.
 *   [Contributing](CONTRIBUTING.md) — How you can help improve the project.
