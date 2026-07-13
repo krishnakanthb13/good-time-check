@@ -1,7 +1,7 @@
 # ✦ AuraTime
 
 <p align="center">
-  <img src="assets/release_v1_0_0.png" alt="Aura Time v1.0.0" width="60%">
+  <img src="assets/release_v1_0_2.png" alt="Aura Time v1.0.2" width="60%">
 </p>
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -18,7 +18,7 @@ Works as both a **Terminal CLI** and a **Progressive Web App (PWA)**.
 
 - ⚡ **Instant results** — Know within 2 seconds of launching
 - 🎨 **Color-coded status** — Green (Safe), Red (Rahu), Yellow (Yama), Purple (Gulika)
-- ⌨️ **Keyboard navigation** — Press R, Y, G for explanations, arrow keys to browse
+- ⌨️ **Keyboard navigation** — Press R, Y, G for explanations, arrow keys to browse (CLI only); Escape to close dialogs (PWA)
 - 📱 **PWA with offline support** — Install on your phone, works without internet
 - 🖥️ **Cross-platform** — Windows (.bat), Linux (.sh), macOS (.sh)
 - 🕐 **24-hour time format** — Clean, unambiguous display
@@ -64,7 +64,7 @@ chmod +x auratime_web.sh
 ```bash
 npm run serve
 ```
-Then manually open [http://localhost:3003/pwa](http://localhost:3003/pwa) in your browser.
+Then manually open [http://localhost:3003/pwa/](http://localhost:3003/pwa/) in your browser.
 
 ---
 
@@ -138,7 +138,7 @@ good-time-check/
 
 ## Requirements
 
-- **Node.js** (v14 or later) — for the CLI
+- **Node.js** (v20 or later) — for the CLI
 - A modern browser — for the PWA
 - No other dependencies required
 

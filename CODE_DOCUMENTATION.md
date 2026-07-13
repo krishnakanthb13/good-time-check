@@ -55,7 +55,7 @@ graph TD
 
 1.  **Initialization**:
     *   **CLI**: Runs `main()`, sets up raw input mode for keyboard capture, and starts a 1-minute ticking interval.
-    *   **PWA**: Registers the Service Worker, detects saved theme, and starts a 1-second ticking interval for the clock.
+    *   **PWA**: Registers the Service Worker, detects saved theme, handles trailing-slash redirects, and starts a 1-second ticking interval for the clock.
 2.  **Logic Trigger**:
     *   Every interval (or on keypress), the UI calls `getTimeStatus()`.
 3.  **Calculation**:
@@ -65,10 +65,10 @@ graph TD
 4.  **UI Render**:
     *   **CLI**: Clears the screen and reprints the ANSI-colored dashboard.
     *   **PWA**: Updates DOM elements for status, icons, colors, and the schedule list.
-
+ 
 ## 📦 Dependencies
-
+ 
 AuraTime is designed to be extremely lightweight with **zero external runtime dependencies**.
-
-*   **Production**: Just `Node.js` (v14+) for CLI. Browser (v2020+) for PWA.
+ 
+*   **Production**: Just `Node.js` (v20+ for LTS compatibility) for CLI. Browser (v2020+) for PWA.
 *   **Development**: `serve` (via npx) is used to host the PWA locally for cross-folder access.

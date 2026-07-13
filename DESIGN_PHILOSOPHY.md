@@ -25,7 +25,7 @@ The same code that powers the command-line interface also powers the web app. Th
 *   **PWA**: Implements modern Glassmorphism, blurred background orbs, and vibrant gradients to make the experience feel high-end and calm.
 
 ### 3. Keyboard-First UX
-Speed is a feature. In the CLI, single-key shortcuts (R, Y, G, S, Q) allow instant navigation. In the PWA, these same shortcuts provide accessibility and power-user efficiency.
+Speed is a feature. In the CLI, single-key shortcuts (R, Y, G, S, Q) allow instant navigation. In the PWA, keyboard navigation focuses on accessibility, allowing users to close active detail dialogs instantly using the `Escape` key.
 
 ### 4. Privacy & Offline-First
 AuraTime requires no internet connection after the initial load. There are no trackers, no cookies, and no analytics. It is a pure utility.

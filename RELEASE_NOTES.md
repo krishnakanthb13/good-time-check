@@ -1,5 +1,27 @@
 # AuraTime Release Notes 🚀
 
+## [v1.0.2] - 2026-07-13
+
+### 🐛 Bug Fixes
+- **CLI Contrast Refresh**: Resolved visibility issues by switching text to black on yellow status banners (`C.bgYellow`) for Yamagandam.
+- **PWA Asset Loading**: Corrected relative script paths for core tables and calculator (`../core/` instead of `./core/`), resolving PWA load failures.
+- **PWA Path Resolution**: Added automatic trailing-slash redirection from `/pwa` to `/pwa/` in browser client to guarantee assets resolve correctly.
+- **Launcher Launch Paths**: Corrected launcher scripts (`auratime_web.bat` and `auratime_web.sh`) to open the web client with a trailing slash.
+
+### ⚡ Improvements
+- **PWA Shortcuts Cleaned**: Removed single-key keyboard shortcuts (`R`, `Y`, `G`) from the web PWA to prevent browser typing conflicts, keeping only `Escape` to close active modal dialogs.
+
+### 📚 Documentation
+- **Sync Status**: Updated `README.md`, `CODE_DOCUMENTATION.md`, and `DESIGN_PHILOSOPHY.md` to accurately document the new PWA redirection logic, simplified keyboard shortcut model, and updated Node compatibility.
+
+### 🏗️ Infrastructure & Maintenance
+- **CI Matrix Modernization**: Excluded deprecated Node 18 from the automated testing matrix in `.github/workflows/ci.yml` and targeted active LTS versions (Node 20 and Node 22) for Vitest 3 compatibility.
+
+## [v1.0.1] - 2026-07-13
+
+### 📚 Documentation
+- **Design Philosophy Clarifications**: Added comprehensive details to `DESIGN_PHILOSOPHY.md` justifying the trade-offs of using a fixed 06:00 sunrise baseline (ensuring speed, privacy, offline reliability, and zero dependencies).
+
 ## [v1.0.0] - 2026-03-11
 
 ### 🚀 New Features
