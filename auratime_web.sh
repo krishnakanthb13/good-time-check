@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # ─── AuraTime Web Launcher (Linux / macOS) ────────────────────────
+# For offline/faster startup, install serve globally once:
+#   npm install -g serve
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -14,7 +16,7 @@ fi
 
 echo ""
 echo "  Starting AuraTime Web Server..."
-echo "  Opening http://localhost:3003/pwa in your default browser..."
+echo "  Opening http://localhost:3003/pwa/ in your default browser..."
 echo ""
 echo "  ------------------------------------------------"
 echo "  [INFO] Press Ctrl + C to close the server cleanly."
@@ -30,11 +32,15 @@ cd "$SCRIPT_DIR"
 (
   sleep 3
   if command -v xdg-open &> /dev/null; then
-      xdg-open http://localhost:3003/pwa
+      xdg-open http://localhost:3003/pwa/
   elif command -v open &> /dev/null; then
-      open http://localhost:3003/pwa
+      open http://localhost:3003/pwa/
   fi
 ) &
 
-# Run the server
-npx -y serve . -l 3003
+# Run the server (uses npx if serve is not installed globally)
+if command -v serve &> /dev/null; then
+  serve . -l 3003
+else
+  npx -y serve . -l 3003
+fi

@@ -1,7 +1,7 @@
 {
   "name": "auratime",
-  "version": "1.0.0",
-  "description": "AuraTime — Instantly check if the current time falls within Rahu Kalam, Yamagandam, or Gulika Kalam.",
+  "version": "1.0.2",
+  "description": "AuraTime \u2014 Instantly check if the current time falls within Rahu Kalam, Yamagandam, or Gulika Kalam.",
   "main": "cli/interface.js",
   "bin": {
     "auratime": "cli/interface.js"
@@ -9,7 +9,12 @@
   "scripts": {
     "start": "node cli/interface.js",
     "check": "node cli/interface.js --once",
-    "serve": "npx -y serve . -l 3003"
+    "serve": "npx -y serve . -l 3003",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.1"
   },
   "keywords": [
     "rahu-kalam",

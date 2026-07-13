@@ -8,11 +8,14 @@ const { TIME_TABLES, DAYS } = require("../core/time_tables");
 const { getTimeStatus } = require("../core/time_calculator");
 const readline = require("readline");
 
+const VERSION = "1.0.2";
+
 // ─── ANSI Color Helpers ───────────────────────────────────────────
 const C = {
   reset: "\x1b[0m",
   bold: "\x1b[1m",
   dim: "\x1b[2m",
+  black: "\x1b[30m",
   red: "\x1b[31m",
   green: "\x1b[32m",
   yellow: "\x1b[33m",
@@ -77,8 +80,9 @@ function printStatus(status) {
           : p.color === "yellow"
           ? C.bgYellow
           : C.bgMagenta;
+      const fg = p.color === "yellow" ? C.black : C.white;
       console.log(
-        `  ${bg}${C.bold}${C.white}  ⚠ ${p.name.toUpperCase()}  ${C.reset}`
+        `  ${bg}${C.bold}${fg}  ⚠ ${p.name.toUpperCase()}  ${C.reset}`
       );
       console.log();
       console.log(
@@ -116,7 +120,7 @@ function printHelp() {
   console.log(`    ${C.cyan}R${C.reset}  Rahu Kalam explanation`);
   console.log(`    ${C.cyan}Y${C.reset}  Yamagandam explanation`);
   console.log(`    ${C.cyan}G${C.reset}  Gulika Kalam explanation`);
-  console.log(`    ${C.cyan}S${C.reset}  Today's full schedule`);
+  console.log(`    ${C.cyan}S${C.reset}  Return to main screen`);
   console.log(`    ${C.cyan}↑↓${C.reset} Navigate explanations`);
   console.log(`    ${C.cyan}Q${C.reset}  Quit`);
   console.log(
@@ -144,6 +148,29 @@ function printExplanation(key) {
 
 // ─── Main ─────────────────────────────────────────────────────────
 function main() {
+  // Help flag
+  if (process.argv.includes("--help") || process.argv.includes("-h")) {
+    console.log(`
+  AuraTime CLI v${VERSION} — Check inauspicious time periods
+
+  Usage:
+    node interface.js [options]
+
+  Options:
+    --once, -1   Run once and exit (non-interactive)
+    --help, -h   Show this help message
+
+  Interactive Keys:
+    R  Rahu Kalam explanation
+    Y  Yamagandam explanation
+    G  Gulika Kalam explanation
+    S  Return to main screen
+    ↑↓ Navigate explanations (when viewing a period)
+    Q  Quit
+`);
+    return;
+  }
+
   // Non-interactive mode: just print and exit
   if (process.argv.includes("--once") || process.argv.includes("-1")) {
     const status = getTimeStatus();
@@ -161,8 +188,23 @@ function main() {
   // Hide cursor for smoother redraws
   process.stdout.write("\x1b[?25l");
 
+  // Show cursor on exit (any exit path)
+  function showCursor() {
+    process.stdout.write("\x1b[?25h");
+  }
+  process.on("exit", showCursor);
+  process.on("SIGINT", () => { showCursor(); process.exit(0); });
+  process.on("uncaughtException", (err) => {
+    showCursor();
+    console.error(err);
+    process.exit(1);
+  });
+
+  // Redraw timer (stored for cleanup)
+  let redrawTimer = null;
+
   function renderCurrentScreen() {
-    clearScreen();
+    if (process.stdout.isTTY) clearScreen();
     if (currentScreen === "main") {
       const status = getTimeStatus();
       printBanner();
@@ -180,7 +222,7 @@ function main() {
 
   // Initial render and setup 1-minute ticking loop
   renderCurrentScreen();
-  setInterval(renderCurrentScreen, 60000);
+  redrawTimer = setInterval(renderCurrentScreen, 60000);
 
   // Setup raw input
   readline.emitKeypressEvents(process.stdin);
@@ -192,8 +234,9 @@ function main() {
     if (!key) return;
 
     if (key.name === "q" || (key.ctrl && key.name === "c")) {
+      clearInterval(redrawTimer);
       clearScreen();
-      process.stdout.write("\x1b[?25h"); // Show cursor again
+      showCursor();
       console.log(`\n  ${C.cyan}${C.bold}Thank you for using AuraTime! ✦${C.reset}\n`);
       process.exit(0);
     }
@@ -222,18 +265,18 @@ function main() {
       return;
     }
 
-    // Arrow navigation for explanations
-    if (key.name === "up") {
-      selectedIndex = (selectedIndex - 1 + periodKeys.length) % periodKeys.length;
-      currentScreen = "explain";
-      renderCurrentScreen();
-      return;
-    }
-    if (key.name === "down") {
-      selectedIndex = (selectedIndex + 1) % periodKeys.length;
-      currentScreen = "explain";
-      renderCurrentScreen();
-      return;
+    // Arrow navigation only when viewing explanations
+    if (currentScreen === "explain") {
+      if (key.name === "up") {
+        selectedIndex = (selectedIndex - 1 + periodKeys.length) % periodKeys.length;
+        renderCurrentScreen();
+        return;
+      }
+      if (key.name === "down") {
+        selectedIndex = (selectedIndex + 1) % periodKeys.length;
+        renderCurrentScreen();
+        return;
+      }
     }
 
     // Any other key goes back to main

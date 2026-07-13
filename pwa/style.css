@@ -93,6 +93,7 @@ body {
   color: var(--text-primary);
   font-weight: 600; /* Bolder text globally */
   min-height: 100vh;
+  min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -104,6 +105,7 @@ body {
   margin: 0 auto;
   padding: 24px 20px 60px;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* ─── Ambient Background Orbs ──────────────────────────────────── */
@@ -298,35 +300,31 @@ html[data-theme="light"] .logo h1 {
   background: var(--rahu-bg);
   border: 1px solid var(--rahu-border);
   box-shadow: 0 0 40px var(--rahu-glow), inset 0 1px 0 rgba(239, 68, 68, 0.1);
-  animation: danger-pulse 2s ease-in-out infinite;
+  animation: rahu-pulse 2s ease-in-out infinite;
 }
 
 .status-card.yama {
   background: var(--yama-bg);
   border: 1px solid var(--yama-border);
   box-shadow: 0 0 40px var(--yama-glow), inset 0 1px 0 rgba(234, 179, 8, 0.1);
-  animation: danger-pulse 2s ease-in-out infinite;
+  animation: yama-pulse 2s ease-in-out infinite;
 }
 
 .status-card.gulika {
   background: var(--gulika-bg);
   border: 1px solid var(--gulika-border);
   box-shadow: 0 0 40px var(--gulika-glow), inset 0 1px 0 rgba(168, 85, 247, 0.1);
-  animation: danger-pulse 2s ease-in-out infinite;
+  animation: gulika-pulse 2s ease-in-out infinite;
 }
 
-@keyframes danger-pulse {
+@keyframes rahu-pulse {
   0%, 100% { box-shadow: 0 0 30px var(--rahu-glow); }
   50% { box-shadow: 0 0 50px var(--rahu-glow); }
 }
-
-.status-card.yama { animation-name: yama-pulse; }
 @keyframes yama-pulse {
   0%, 100% { box-shadow: 0 0 30px var(--yama-glow); }
   50% { box-shadow: 0 0 50px var(--yama-glow); }
 }
-
-.status-card.gulika { animation-name: gulika-pulse; }
 @keyframes gulika-pulse {
   0%, 100% { box-shadow: 0 0 30px var(--gulika-glow); }
   50% { box-shadow: 0 0 50px var(--gulika-glow); }
@@ -400,9 +398,11 @@ html[data-theme="light"] .logo h1 {
   cursor: pointer; /* Makes it act like a button */
 }
 
-.schedule-item:hover {
-  background: var(--bg-card-hover);
-  transform: translateX(4px);
+@media (hover: hover) {
+  .schedule-item:hover {
+    background: var(--bg-card-hover);
+    transform: translateX(4px);
+  }
 }
 
 .schedule-item.active {
@@ -426,14 +426,23 @@ html[data-theme="light"] .logo h1 {
 .schedule-dot.dot-yama { background: var(--yama); }
 .schedule-dot.dot-gulika { background: var(--gulika); }
 
-.schedule-item.active .schedule-dot {
-  animation: dot-blink 1.5s ease-in-out infinite;
-}
 
 @keyframes dot-blink {
-  0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--rahu); }
   50% { opacity: 0.4; box-shadow: none; }
 }
+@keyframes dot-blink-yama {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--yama); }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+@keyframes dot-blink-gulika {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--gulika); }
+  50% { opacity: 0.4; box-shadow: none; }
+}
+
+.schedule-item.active .dot-rahu { animation: dot-blink 1.5s ease-in-out infinite; }
+.schedule-item.active .dot-yama { animation: dot-blink-yama 1.5s ease-in-out infinite; }
+.schedule-item.active .dot-gulika { animation: dot-blink-gulika 1.5s ease-in-out infinite; }
 
 .schedule-name {
   font-weight: 700; /* bolder name */
@@ -566,4 +575,13 @@ html[data-theme="light"] .modal {
 
 @media (min-width: 768px) {
   .app { padding: 40px 24px 80px; }
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

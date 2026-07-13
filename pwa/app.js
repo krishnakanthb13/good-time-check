@@ -3,6 +3,12 @@
  * Renders status, schedule, and explanation cards using the shared core engine.
  */
 
+// ─── Core Guard ────────────────────────────────────────────────
+if (typeof getTimeStatus !== "function" || typeof TIME_TABLES === "undefined") {
+  document.body.innerHTML = "<h2 style='text-align:center;padding:40px;color:#ef4444'>Failed to load AuraTime core.</h2>";
+  throw new Error("AuraTime core modules not loaded");
+}
+
 // ─── DOM References ──────────────────────────────────────────────
 const clockEl = document.getElementById("clock");
 const dayEl = document.getElementById("day");
@@ -38,6 +44,15 @@ const STATUS_ICONS = {
   yamagandam: "⚠",
   gulikaKalam: "⚠",
 };
+
+// ─── Safe localStorage Helpers ──────────────────────────────────
+function safeGetItem(key) {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+function safeSetItem(key, value) {
+  try { localStorage.setItem(key, value); } catch { /* storage full or blocked */ }
+}
 
 // ─── Render Functions ────────────────────────────────────────────
 function updateClock() {
@@ -86,7 +101,7 @@ function renderSchedule(status) {
       <span class="schedule-time">${s.start} – ${s.end}</span>
       ${s.isActive ? '<span class="schedule-badge">NOW</span>' : ""}
     `;
-    
+
     // Open modal on click
     item.addEventListener("click", () => {
       openModal(s.key);
@@ -97,6 +112,17 @@ function renderSchedule(status) {
 }
 
 // ─── Theme Logic ─────────────────────────────────────────────────
+function setTheme(theme) {
+  if (theme === "light") {
+    document.documentElement.setAttribute("data-theme", "light");
+    updateThemeIcon("light");
+  } else {
+    document.documentElement.removeAttribute("data-theme");
+    updateThemeIcon("dark");
+  }
+  safeSetItem("theme", theme);
+}
+
 function updateThemeIcon(theme) {
   if (theme === "light") {
     // Moon icon for switching back to dark
@@ -107,56 +133,94 @@ function updateThemeIcon(theme) {
   }
 }
 
-const savedTheme = localStorage.getItem("theme");
+const savedTheme = safeGetItem("theme");
 if (savedTheme === "light") {
-  document.documentElement.setAttribute("data-theme", "light");
-  updateThemeIcon("light");
+  setTheme("light");
 }
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
     const currentTheme = document.documentElement.getAttribute("data-theme");
-    if (currentTheme === "light") {
-      document.documentElement.removeAttribute("data-theme");
-      localStorage.setItem("theme", "dark");
-      updateThemeIcon("dark");
-    } else {
-      document.documentElement.setAttribute("data-theme", "light");
-      localStorage.setItem("theme", "light");
-      updateThemeIcon("light");
-    }
+    setTheme(currentTheme === "light" ? "dark" : "light");
   });
 }
 
 // ─── Modal Logic ─────────────────────────────────────────────────
+let lastFocusedElement = null;
+const appRoot = document.getElementById("app");
+
 function openModal(key) {
   const period = TIME_TABLES[key];
   if (!period) return;
   const dotClass = DOT_CLASS_MAP[key];
   const cssClass = CSS_CLASS_MAP[key] || "rahu";
-  
+
+  lastFocusedElement = document.activeElement;
+
   modalBody.innerHTML = `
-    <div class="modal-title">
+    <div class="modal-title" id="modalTitle">
       <span class="modal-dot ${dotClass}"></span>
       <span style="color: var(--${cssClass})">${period.name}</span>
     </div>
     <p class="modal-desc">${period.description}</p>
     <p class="modal-warn">${period.warning}</p>
   `;
-  modal.classList.add("show");
+  modal?.classList.add("show");
+
+  // Mark background as inert to prevent interaction behind dialog
+  if (appRoot) appRoot.inert = true;
+
+  // Focus the close button (first focusable element)
+  const focusTarget = modal?.querySelector("#modalClose") || modal;
+  focusTarget?.focus();
+}
+
+function closeModal() {
+  modal?.classList.remove("show");
+  // Remove inert from background
+  if (appRoot) appRoot.inert = false;
+  // Restore focus to the element that opened the modal
+  if (lastFocusedElement && lastFocusedElement.isConnected) {
+    lastFocusedElement.focus();
+  }
+  lastFocusedElement = null;
 }
 
 if (modalClose) {
-  modalClose.addEventListener("click", () => modal.classList.remove("show"));
+  modalClose.addEventListener("click", closeModal);
 }
 
 if (modal) {
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) modal.classList.remove("show");
+    if (e.target === modal) closeModal();
+  });
+
+  // Focus trap: keep Tab cycling within the modal
+  modal.addEventListener("keydown", (e) => {
+    if (e.key !== "Tab" || !modal.classList.contains("show")) return;
+    const focusable = modal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 }
 
-// ─── Main Update Loop ────────────────────────────────────────────
+// ─── Main Update Loop (drift-corrected) ─────────────────────────
+let timerId = null;
+
 function update() {
   updateClock();
   const status = getTimeStatus();
@@ -164,27 +228,52 @@ function update() {
   renderSchedule(status);
 }
 
-// ─── Keyboard Navigation ─────────────────────────────────────────
-const CARD_KEYS = { r: "rahuKalam", y: "yamagandam", g: "gulikaKalam" };
+function tick() {
+  update();
+  const delay = 1000 - (Date.now() % 1000);
+  timerId = setTimeout(tick, delay);
+}
 
-document.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
-  if (CARD_KEYS[key]) {
-    openModal(CARD_KEYS[key]);
-  } else if (key === "escape") {
-    modal.classList.remove("show");
+// ─── Visibility Optimization ────────────────────────────────────
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearTimeout(timerId);
+    timerId = null;
+  } else if (!timerId) {
+    tick();
   }
 });
 
+// ─── Keyboard Navigation ─────────────────────────────────────────
+document.addEventListener("keydown", (e) => {
+  if (e.key.toLowerCase() === "escape") {
+    closeModal();
+  }
+});
+
+// ─── Error Boundary ─────────────────────────────────────────────
+function showErrorFallback() {
+  document.getElementById("app").innerHTML = `
+    <div style="text-align:center;padding:60px 20px;color:var(--text-primary)">
+      <h2 style="margin-bottom:12px">Something went wrong</h2>
+      <p style="color:var(--text-muted)">Please refresh the page or try again later.</p>
+    </div>
+  `;
+}
+window.addEventListener("error", showErrorFallback);
+window.addEventListener("unhandledrejection", showErrorFallback);
+
 // ─── Init ─────────────────────────────────────────────────────────
-update();
-setInterval(update, 1000);
+tick();
 
 // ─── Service Worker Registration ──────────────────────────────────
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
+    const swPath = window.location.pathname.includes("/pwa/")
+      ? "service-worker.js"
+      : "/pwa/service-worker.js";
     navigator.serviceWorker
-      .register("/pwa/service-worker.js")
+      .register(swPath)
       .then(() => console.log("AuraTime SW registered"))
       .catch((err) => console.log("SW registration failed:", err));
   });

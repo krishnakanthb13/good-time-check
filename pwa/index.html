@@ -2,14 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    if (window.location.pathname === '/pwa') {
+      window.location.replace(window.location.pathname + '/' + window.location.search + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="AuraTime — Instantly check if the current time falls within Rahu Kalam, Yamagandam, or Gulika Kalam. A minimal, beautiful Vedic time checker." />
   <meta name="theme-color" content="#0f0f1a" />
   <title>AuraTime — Good Time / Bad Time Checker</title>
-  <link rel="manifest" href="/pwa/manifest.json" />
+  <link rel="manifest" href="./manifest.json" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/pwa/style.css" />
+  <link rel="stylesheet" href="./style.css" />
+  <!-- Prevent theme flash: apply saved theme before render -->
+  <script>
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+    } catch(e) {}
+  </script>
 </head>
 <body>
   <div class="app" id="app">
@@ -38,7 +50,7 @@
 
     <!-- Status Banner -->
     <section class="status-section" id="statusSection">
-      <div class="status-card" id="statusCard">
+      <div class="status-card" id="statusCard" aria-live="polite">
         <div class="status-icon" id="statusIcon">✓</div>
         <div class="status-label" id="statusLabel">Checking...</div>
         <div class="status-detail" id="statusDetail"></div>
@@ -52,7 +64,7 @@
     </section>
 
     <!-- Explanation Modal -->
-    <div id="explanationModal" class="modal">
+    <div id="explanationModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
       <div class="modal-content">
         <button class="modal-close" id="modalClose" aria-label="Close Modal">&times;</button>
         <div id="modalBody"></div>
@@ -61,12 +73,13 @@
 
     <!-- Footer -->
     <footer class="footer">
-      <p>AuraTime v1.0 &middot; Timings based on standard 06:00 sunrise</p>
+      <p>🤖 Built by AI &middot; 🧠 Brain by Krishna Kanth B</p>
+      <p>AuraTime v1.0.2 &middot; Timings based on standard 06:00 sunrise</p>
     </footer>
   </div>
 
-  <script src="/core/time_tables.js"></script>
-  <script src="/core/time_calculator.js"></script>
-  <script src="/pwa/app.js"></script>
+  <script src="../core/time_tables.js"></script>
+  <script src="../core/time_calculator.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>

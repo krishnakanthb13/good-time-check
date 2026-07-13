@@ -5,7 +5,18 @@
  * All times in 24-hour format.
  */
 
-const TIME_TABLES = {
+const _freezeSeen = new WeakSet();
+function deepFreeze(obj) {
+  if (!obj || typeof obj !== "object" || _freezeSeen.has(obj)) return obj;
+  _freezeSeen.add(obj);
+  Object.freeze(obj);
+  for (const val of Object.values(obj)) {
+    deepFreeze(val);
+  }
+  return obj;
+}
+
+const TIME_TABLES = deepFreeze({
   rahuKalam: {
     name: "Rahu Kalam",
     color: "red",
@@ -57,9 +68,9 @@ const TIME_TABLES = {
       6: { start: "06:00", end: "07:30" }, // Saturday
     },
   },
-};
+});
 
-const DAYS = [
+const DAYS = Object.freeze([
   "Sunday",
   "Monday",
   "Tuesday",
@@ -67,7 +78,7 @@ const DAYS = [
   "Thursday",
   "Friday",
   "Saturday",
-];
+]);
 
 // Export for both Node.js and browser
 if (typeof module !== "undefined" && module.exports) {

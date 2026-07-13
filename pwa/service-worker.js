@@ -1,11 +1,11 @@
-const CACHE_NAME = "auratime-v1";
+const CACHE_NAME = "auratime-v1.0.2";
 const ASSETS = [
-  "/pwa/",
-  "/pwa/index.html",
-  "/pwa/style.css",
-  "/pwa/app.js",
-  "/core/time_tables.js",
-  "/core/time_calculator.js",
+  "./",
+  "./index.html",
+  "./style.css",
+  "./app.js",
+  "../core/time_tables.js",
+  "../core/time_calculator.js",
 ];
 
 // Install — cache shell assets
@@ -30,9 +30,18 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Fetch — cache-first, network fallback
+// Fetch — cache-first, network fallback with offline page
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((cached) => cached || fetch(event.request))
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).catch(() => {
+        // Offline fallback: return cached index.html for navigation requests
+        if (event.request.mode === "navigate") {
+          return caches.match("./index.html");
+        }
+        return Response.error();
+      });
+    })
   );
 });
